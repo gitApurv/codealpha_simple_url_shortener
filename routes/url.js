@@ -1,11 +1,12 @@
 const express = require("express");
 const shortid = require("shortid");
 const { URL } = require("url");
-const db = require("../config/database");
+const Url = require("../models/Url");
 const path = require("path");
 
 const router = express.Router();
 
+// Helper function for URL validation
 const isValidUrl = (s) => {
   try {
     new URL(s);
@@ -17,7 +18,7 @@ const isValidUrl = (s) => {
 
 // POST /shorten
 // Create a short URL
-router.post("/shorten", (req, res) => {
+router.post("/shorten", async (req, res) => {
   const { longUrl } = req.body;
   const baseUrl = `${req.protocol}://${req.get("host")}`;
 
@@ -26,40 +27,56 @@ router.post("/shorten", (req, res) => {
   }
 
   const shortCode = shortid.generate();
-  const shortUrl = `${baseUrl}/${shortCode}`;
-  const createdAt = new Date().toISOString();
 
-  const sql = `INSERT INTO urls (shortCode, originalUrl, createdAt) VALUES (?, ?, ?)`;
-  db.run(sql, [shortCode, longUrl, createdAt], function (err) {
-    if (err) {
-      return res.status(500).json({ error: "Server error." });
+  try {
+    // Check if the long URL already exists in the database
+    let url = await Url.findOne({ originalUrl: longUrl });
+
+    if (url) {
+      // If it exists, return the existing short URL
+      res.json(url);
+    } else {
+      // If not, create a new entry
+      const shortUrl = `${baseUrl}/${shortCode}`;
+
+      url = new Url({
+        originalUrl: longUrl,
+        shortCode: shortCode,
+      });
+
+      await url.save();
+
+      res.json({
+        originalUrl: url.originalUrl,
+        shortUrl: shortUrl,
+        shortCode: url.shortCode,
+      });
     }
-    res.json({
-      originalUrl: longUrl,
-      shortUrl: shortUrl,
-      shortCode: shortCode,
-    });
-  });
+  } catch (err) {
+    console.error("Server error:", err);
+    res.status(500).json({ error: "Server error. Please try again." });
+  }
 });
 
 // GET /:shortCode
 // Redirect to the original long URL
-router.get("/:shortCode", (req, res) => {
+router.get("/:shortCode", async (req, res) => {
   const { shortCode } = req.params;
 
-  const sql = `SELECT originalUrl FROM urls WHERE shortCode = ?`;
-  db.get(sql, [shortCode], (err, row) => {
-    if (err) {
-      return res.status(500).send("Server Error");
-    }
-    if (row) {
-      return res.redirect(row.originalUrl);
+  try {
+    const url = await Url.findOne({ shortCode: shortCode });
+
+    if (url) {
+      return res.redirect(url.originalUrl);
     } else {
       return res
         .status(404)
         .sendFile(path.join(__dirname, "..", "views", "404.html"));
     }
-  });
+  } catch (err) {
+    console.error("Server error:", err);
+    return res.status(500).send("Server Error");
+  }
 });
 
 module.exports = router;

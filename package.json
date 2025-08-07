@@ -1,21 +1,23 @@
 {
-  "name": "url-shortener-express",
+  "name": "url-shortener-express-mongo",
   "version": "1.0.0",
-  "description": "A simple URL shortener built with Express.js and SQLite.",
-  "main": "app.js",
+  "description": "A simple URL shortener built with Express.js and MongoDB.",
+  "main": "index.js",
   "scripts": {
     "start": "node app.js"
   },
   "keywords": [
     "url-shortener",
     "express",
-    "sqlite"
+    "mongodb",
+    "mongoose"
   ],
   "author": "Apurv Maurya",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^17.2.1",
     "express": "^4.18.2",
-    "shortid": "^2.2.16",
-    "sqlite3": "^5.1.6"
+    "mongoose": "^8.0.0",
+    "shortid": "^2.2.16"
   }
 }
