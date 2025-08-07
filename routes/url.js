@@ -16,8 +16,14 @@ const isValidUrl = (s) => {
   }
 };
 
-// POST /shorten
-// Create a short URL
+// @route   GET /
+// @desc    Serve the main HTML page
+router.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "public", "index.html"));
+});
+
+// @route   POST /shorten
+// @desc    Create a short URL
 router.post("/shorten", async (req, res) => {
   const { longUrl } = req.body;
   const baseUrl = `${req.protocol}://${req.get("host")}`;
@@ -34,7 +40,12 @@ router.post("/shorten", async (req, res) => {
 
     if (url) {
       // If it exists, return the existing short URL
-      res.json(url);
+      const shortUrl = `${baseUrl}/${url.shortCode}`;
+      res.json({
+        originalUrl: url.originalUrl,
+        shortUrl: shortUrl,
+        shortCode: url.shortCode,
+      });
     } else {
       // If not, create a new entry
       const shortUrl = `${baseUrl}/${shortCode}`;
@@ -48,7 +59,7 @@ router.post("/shorten", async (req, res) => {
 
       res.json({
         originalUrl: url.originalUrl,
-        shortUrl: shortUrl,
+        shortUrl: shortUrl, // Construct the full short URL for the response
         shortCode: url.shortCode,
       });
     }
@@ -58,8 +69,8 @@ router.post("/shorten", async (req, res) => {
   }
 });
 
-// GET /:shortCode
-// Redirect to the original long URL
+// @route   GET /:shortCode
+// @desc    Redirect to the original long URL
 router.get("/:shortCode", async (req, res) => {
   const { shortCode } = req.params;
 
