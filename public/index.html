@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="gradient-bg">
+    <div class="container">
+        <h1>URL Shortener</h1>
+        <p>Enter a long URL to make it short and sweet!</p>
+        
+        <form id="urlForm">
+            <input type="url" id="longUrl" name="longUrl" placeholder="https://example.com/very-long-url" required>
+            <button type="submit" id="submitButton">
+                <span id="buttonText">Shorten URL</span>
+                <svg id="spinner" class="animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            </button>
+        </form>
+
+        <div id="result" class="hidden">
+            <p>Your shortened URL:</p>
+            <div class="result-box">
+                <a id="shortUrlLink" href="#" target="_blank"></a>
+                <button id="copyButton" title="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                </button>
+            </div>
+            <p id="copyFeedback" class="hidden">Copied!</p>
+        </div>
+        <div id="error" class="hidden"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

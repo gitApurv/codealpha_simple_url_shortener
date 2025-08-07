@@ -1,0 +1,21 @@
+{
+  "name": "url-shortener-express",
+  "version": "1.0.0",
+  "description": "A simple URL shortener built with Express.js and SQLite.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [
+    "url-shortener",
+    "express",
+    "sqlite"
+  ],
+  "author": "Apurv Maurya",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "shortid": "^2.2.16",
+    "sqlite3": "^5.1.6"
+  }
+}
