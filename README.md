@@ -1,6 +1,6 @@
 # URL Shortener
 
-A simple, fast, and efficient URL shortening service built with Node.js, Express.js, and MongoDB using the Mongoose ORM. This application provides a clean interface to convert long URLs into manageable, short links and redirects users to the original URL when they access the short link.
+A simple, fast, and efficient URL shortening service built with Node.js, Express.js, and MongoDB using the Mongoose ODM. This application provides a clean interface to convert long URLs into manageable, short links and redirects users to the original URL when they access the short link.
 
 ## Features
 
